@@ -6,13 +6,13 @@ const main = async () => {
     await rsvpContract.deployed();
     console.log("Contract deployed to:", rsvpContract.address);
 
-    const [deployer, address1, address2] = hre.ethers.getSigners();
+    const [deployer, address1, address2] = await hre.ethers.getSigners();
 
     let deposit = hre.ethers.utils.parseEther("1");
     let maxCapacity = 3;
     let timestamp =1718926200;
     // Put an IPFS CID already created by the WBW3 team here
-    let eventDataCID = ""
+    let eventDataCID = "bafybeibhwfzx6oo5rymsxmkdxpmkfwyvbjrrwcl7cekmbzlupmp5ypkyfi"
 
     let txn = await rsvpContract.createNewEvent(
         timestamp,
@@ -50,7 +50,11 @@ const main = async () => {
     );
 
     // wait 10 years
-    await hre.network.provider.send("evm_increasedTime", [15778800000000]);
+    await hre.network.provider.send("evm_increaseTime", [15778800000000]);
+
+    txn = await rsvpContract.withdrawUnclaimedDeposits(eventID);
+    wait = await txn.wait();
+    console.log("WITHDRAWN:", wait.events[0].event, wait.events[0].args);
 };
 
 const runMain = async () => {

@@ -16,7 +16,7 @@ contract Web3RSVP {
     
     event ConfirmedAttendee(bytes32 eventID, address attendeeAddress);
     
-    event DepositPaidOut(bytes32 eventID);
+    event DepositPaidOut(bytes32 eventID, uint256 payout);
 
     struct CreateEvent {
         bytes32 eventId;
@@ -69,7 +69,7 @@ contract Web3RSVP {
             maxCapacity,
             deposit,
             eventDataCID
-        )
+        );
     }
 
     function createNewRSVP(bytes32 eventId) external payable {
@@ -86,10 +86,10 @@ contract Web3RSVP {
         require(block.timestamp <= myEvent.eventTimestamp, "EVENT ALREADY HAPPENED");
 
         // make sure event is under max capacity
-        require(myEvent.maxCapacity > myEvent.confirmedRSVPs, "EVENT HAS REACHED MAX CAPACITY");
+        require(myEvent.maxCapacity > myEvent.confirmedRSVPs.length, "EVENT HAS REACHED MAX CAPACITY");
 
         // require that user (msg.sender) hasn't already RSVP'd
-        for(uint i; i < myEvent.confirmedRSVPs; i ++) {
+        for(uint i; i < myEvent.confirmedRSVPs.length; i ++) {
             require(msg.sender != myEvent.confirmedRSVPs[i], "USER HAS ALREADY RSVPd");
         }
         // Push user address in confirmedRSVPs array
@@ -105,12 +105,12 @@ contract Web3RSVP {
 
         // require that msg.seneder is the owner of the event 
         // only the host should be able to check people in
-        require(msg.sender == myEvent.eventOwner, "NOT AUTHORIZED")
+        require(msg.sender == myEvent.eventOwner, "NOT AUTHORIZED");
 
         address rsvpConfirm;
 
         // if user is in the list assign the variable
-        for(uint8 i; i < myEvent.confirmedRSVPs.lenght, i ++) {
+        for(uint8 i; i < myEvent.confirmedRSVPs.length; i ++) {
             if(myEvent.confirmedRSVPs[i] == attendee) {
                 rsvpConfirm = myEvent.confirmedRSVPs[i];
             }
@@ -120,7 +120,7 @@ contract Web3RSVP {
         require(rsvpConfirm == attendee, "NO RSVP TO CONFIRM");
 
         // require that attendee is NOT already in the claimedRSVPs list AKA make sure they haven't alreadychecked in
-        for (uint8 i; i < myEvent.claimedRSVPs.lenght, i ++) {
+        for (uint8 i; i < myEvent.claimedRSVPs.length; i ++) {
             require(myEvent.claimedRSVPs[i] != attendee, "Attendee has already claimed");
         }
 
@@ -152,7 +152,7 @@ contract Web3RSVP {
         require(msg.sender == myEvent.eventOwner, "NOT AUTHORIZED to confirm all attendees");
 
         // confirm each attendee in the rsvp array
-        for (uint8 i; i < myEvent.confirmedRSVPs.lenght, i ++) {
+        for (uint8 i; i < myEvent.confirmedRSVPs.length; i ++) {
             confirmAttendee(eventId, myEvent.confirmedRSVPs[i]);
         }
     }
@@ -170,20 +170,20 @@ contract Web3RSVP {
         require(
             block.timestamp >= myEvent.eventTimestamp + 7 days,
             "TOO EARLY"
-        )
+        );
 
         // only the vent owner can withdraw
         require(msg.sender == myEvent.eventOwner, "MUST BE EVENT OWNER");
 
         // calculate how many people didn't claim by comparing
-        uint256 unclaimed = myEvent.confirmedRSVPs.lenght - myEvent.claimedRSVPs.lenght
-        uint256 payout = unclaimed * myEvent.deposit
+        uint256 unclaimed = myEvent.confirmedRSVPs.length - myEvent.claimedRSVPs.length;
+        uint256 payout = unclaimed * myEvent.deposit;
 
         // mark paidOut as true
         myEvent.paidOut = true;
 
         // send payout to envent owner
-        (bool sent,) = msg.sender.call{value: payout}("")
+        (bool sent,) = msg.sender.call{value: payout}("");
 
         // if this fails
         if (!sent) {
@@ -192,6 +192,6 @@ contract Web3RSVP {
 
         require(sent, "FAILED TO SEND ETHER TO EVENT OWNER");
 
-        emit DepositPaidOut(eventId);
+        emit DepositPaidOut(eventId, payout);
     }
 }
