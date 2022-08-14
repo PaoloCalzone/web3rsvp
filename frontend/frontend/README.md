@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Web3RSVP-frontend
 
 ### Fork and clone the repo from Github to work with it locally
@@ -20,6 +19,3 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-=======
-# WEB3RSVP workshop 🚀 
->>>>>>> abf212a90104754767778c43a27e1c654e6bad52
