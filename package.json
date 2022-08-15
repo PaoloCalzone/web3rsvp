@@ -8,8 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@protofire/subgraph-toolkit": "^0.1.2"
-  }
+  "license": "ISC"
 }
