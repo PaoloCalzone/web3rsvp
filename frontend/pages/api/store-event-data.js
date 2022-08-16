@@ -1,6 +1,8 @@
 import { Web3Storage, File, getFilesFromPath } from "web3.storage";
 const { resolve } = require("path");
 
+// This is an internal API route to post data on web3storage
+// on the handlesubmit() call function from the create-event page.
 export default async function handler(req, res) {
   if (req.method === "POST") {
     return await storeEventData(req, res);
@@ -12,6 +14,7 @@ export default async function handler(req, res) {
 }
 
 async function storeEventData(req, res) {
+  // body from the create-event page (name, description, link, image)
   const body = req.body;
   try {
     const files = await makeFileObjects(body);
