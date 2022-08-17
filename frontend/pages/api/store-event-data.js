@@ -17,6 +17,7 @@ async function storeEventData(req, res) {
   // body from the create-event page (name, description, link, image)
   const body = req.body;
   try {
+    console.log("storeEventData");
     const files = await makeFileObjects(body);
     const cid = await storeFiles(files);
     return res.status(200).json({ success: true, cid: cid });
@@ -35,6 +36,7 @@ async function makeFileObjects(body) {
   const files = await getFilesFromPath(imageDirectory);
 
   files.push(new File([buffer], "data.json"));
+  console.log("smakeFileObjects");
   return files;
 }
 
@@ -45,5 +47,6 @@ function makeStorageClient() {
 async function storeFiles(files) {
   const client = makeStorageClient();
   const cid = await client.put(files);
+  console.log("storeFiles");
   return cid;
 }
