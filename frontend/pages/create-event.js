@@ -314,6 +314,7 @@ export default function CreateEvent() {
         {!account && (
           <section className="flex flex-col items-start py-8">
             <p className="mb-4">Please connect your wallet to create events.</p>
+            <ConnectButton />
           </section>
         )}
         {success && eventID && (

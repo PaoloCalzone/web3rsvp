@@ -47,6 +47,7 @@ function makeStorageClient() {
 async function storeFiles(files) {
   const client = makeStorageClient();
   const cid = await client.put(files);
+  console.log("CID is:", cid);
   console.log("storeFiles");
   return cid;
 }
