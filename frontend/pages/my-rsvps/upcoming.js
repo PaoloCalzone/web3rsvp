@@ -7,40 +7,63 @@ import EventCard from "../../components/EventCard";
 
 export default function MyUpcomingRSVPs() {
   const { data: account } = useAccount();
+  // To lower case because some providers use UpperCase form some letters
   const id = account ? account.address.toLowerCase() : "";
+
   const [currentTimestamp, setTimeStamp] = useState(
     new Date().getTime().toString()
   );
   const { loading, error, data } = useQuery(MY_UPCOMMING_RSVP, {
     variables: { id },
   });
+  // console.log("DATA:", data);
+  if (loading)
+    return (
+      <Dashboard page="rsvps" isUpcoming={true}>
+        <p>Loading...</p>
+      </Dashboard>
+    );
+  if (error)
+    return (
+      <Dashboard page="rsvps" isUpcoming={true}>
+        <p>`Error! ${error.message}`</p>
+      </Dashboard>
+    );
 
   return (
-    <div>
-      {loading && (
-        <Dashboard page="rsvps" isUpcoming={true}>
-          Loading...
-        </Dashboard>
-      )}
-      {error && (
-        <Dashboard page="rsvps" isUpcoming={true}>
-          `Error: ${error.message}`
-        </Dashboard>
-      )}
-      {data.account ? (
-        <Dashboard page="rsvps" isUpcoming={true}>
-          {data.account}
-        </Dashboard>
+    <Dashboard page="rsvps" isUpcoming={true}>
+      {account ? (
+        <div>
+          {data && !data.account && <p>No upcoming RSVPs found</p>}
+          {data && data.account && (
+            <ul
+              role="list"
+              className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
+            >
+              {data.account.rsvps.map(function (rsvp) {
+                if (rsvp.event.eventTimestamp > currentTimestamp) {
+                  return (
+                    <li key={rsvp.event.id}>
+                      <EventCard
+                        id={rsvp.event.id}
+                        name={rsvp.event.name}
+                        eventTimestamp={rsvp.event.eventTimestamp}
+                        imageURL={rsvp.event.imageURL}
+                      />
+                    </li>
+                  );
+                }
+              })}
+            </ul>
+          )}
+        </div>
       ) : (
-        <Dashboard page="rsvps" isUpcoming={true}>
-          <p>
-            Connect your wallet with the account your RSVPed to display your
-            reservations!
-          </p>
+        <div className="flex flex-col items-center py-8">
+          <p className="mb-4">Please connect your wallet to view your rsvps</p>
           <ConnectButton />
-        </Dashboard>
+        </div>
       )}
-    </div>
+    </Dashboard>
   );
 }
 
