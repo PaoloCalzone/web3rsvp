@@ -36,7 +36,9 @@ export default function MyPastRSVPs() {
     <Dashboard page="rsvps" isUpcoming={false}>
       {account ? (
         <div>
-          {data && pastRsvps.length == 0 && <p>No past RSVPs found</p>}
+          {data && (!data.account || pastRsvps == 0) && (
+            <p>No past RSVPs found</p>
+          )}
           {data && data.account && (
             <ul
               role="list"
