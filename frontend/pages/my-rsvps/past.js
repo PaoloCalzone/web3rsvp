@@ -9,7 +9,9 @@ export default function MyPastRSVPs() {
   const { data: account } = useAccount();
   const id = account ? account.address.toLowerCase() : "";
 
-  const [currentTimestamp, setEventTimestamp] = useState(new Date().getTime());
+  const [currentTimestamp, setEventTimestamp] = useState(
+    new Date().getTime().toString()
+  );
 
   const { loading, error, data } = useQuery(MY_PAST_RSVPS, {
     variables: { id },
