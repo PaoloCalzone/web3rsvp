@@ -1,16 +1,16 @@
-import { Address, ipfs, json } from "@graphprotocol/graph-ts"
+import { Address, ipfs, json } from "@graphprotocol/graph-ts";
 import {
   ConfirmedAttendee,
   DepositPaidOut,
   NewEventCreated,
-  NewRSVP
-} from "../generated/Web3RSVP/Web3RSVP"
-import { Account, RSVP, Confirmation, Event } from "../generated/schema"
-import { integer } from "@protofire/subgraph-toolkit"
+  NewRSVP,
+} from "../generated/Web3RSVP/Web3RSVP";
+import { Account, RSVP, Confirmation, Event } from "../generated/schema";
+import { integer } from "@protofire/subgraph-toolkit";
 
 export function handleNewEventCreated(event: NewEventCreated): void {
   let newEvent = Event.load(event.params.eventID.toHex());
-  if ( newEvent == null) {
+  if (newEvent == null) {
     newEvent = new Event(event.params.eventID.toHex());
     newEvent.eventID = event.params.eventID;
     newEvent.eventOwner = event.params.creatorAddress;
@@ -20,47 +20,47 @@ export function handleNewEventCreated(event: NewEventCreated): void {
     newEvent.paidOut = false;
     newEvent.totalRSVPs = integer.ZERO;
     newEvent.totalConfirmedAttendees = integer.ZERO;
-    
-  let metadata = ipfs.cat(event.params.eventDataCID + "/data.json");
-  if (metadata) {
-    const value = json.fromBytes(metadata).toObject();
-    if (value) {
-      const name = value.get("name");
-      const description = value.get("description");
-      const link = value.get("link");
-      const imagePath = value.get("image");
 
-      if (name) {
-        newEvent.name = name.toString();
-      }
+    let metadata = ipfs.cat(event.params.eventDataCID + "/data.json");
+    if (metadata) {
+      const value = json.fromBytes(metadata).toObject();
+      if (value) {
+        const name = value.get("name");
+        const description = value.get("description");
+        const link = value.get("link");
+        const imagePath = value.get("image");
 
-      if (description) {
-        newEvent.description = description.toString();
-      }
+        if (name) {
+          newEvent.name = name.toString();
+        }
 
-      if (link) {
-        newEvent.link = link.toString();
-      }
+        if (description) {
+          newEvent.description = description.toString();
+        }
 
-      if (imagePath) {
-        const imageURL =
-          "https://ipfs.io/ipfs/" +
-          event.params.eventDataCID +
-          imagePath.toString();
-        newEvent.imageURL = imageURL;
-      } else {
-        // return fallback image if no imagePath
-        const fallbackURL =
-          "https://ipfs.io/ipfs/bafybeibssbrlptcefbqfh4vpw2wlmqfj2kgxt3nil4yujxbmdznau3t5wi/event.png";
-        newEvent.imageURL = fallbackURL;
+        if (link) {
+          newEvent.link = link.toString();
+        }
+
+        if (imagePath) {
+          const imageURL =
+            "https://ipfs.io/ipfs/" +
+            event.params.eventDataCID +
+            imagePath.toString();
+          newEvent.imageURL = imageURL;
+        } else {
+          // return fallback image if no imagePath
+          const fallbackURL =
+            "https://ipfs.io/ipfs/bafybeibssbrlptcefbqfh4vpw2wlmqfj2kgxt3nil4yujxbmdznau3t5wi/event.png";
+          newEvent.imageURL = fallbackURL;
+        }
       }
     }
-  }
     newEvent.save();
   }
 }
 
-function getOrCreateAccount (address: Address): Account {
+function getOrCreateAccount(address: Address): Account {
   let account = Account.load(address.toHex());
   if (account == null) {
     account = new Account(address.toHex());
@@ -71,7 +71,8 @@ function getOrCreateAccount (address: Address): Account {
   return account;
 }
 export function handleNewRSVP(event: NewRSVP): void {
-  let newRSVP = RSVP.load(event.transaction.from.toHex());
+  let id = event.params.eventID.toHex() + event.params.attendeeAddress.toHex();
+  let newRSVP = RSVP.load(id);
   let account = getOrCreateAccount(event.params.attendeeAddress);
   let thisEvent = Event.load(event.params.eventID.toHex());
   if (newRSVP == null && thisEvent != null) {
@@ -94,7 +95,7 @@ export function handleConfirmedAttendee(event: ConfirmedAttendee): void {
   // we load event's object
   let thisEvent = Event.load(event.params.eventID.toHex());
   // If confirmation doesn't already exist and this event exists
-  if ( newConfirmation == null && thisEvent != null) {
+  if (newConfirmation == null && thisEvent != null) {
     // create the Confirmation object
     newConfirmation = new Confirmation(id);
     // set the attendee from the account object
