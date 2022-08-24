@@ -27,33 +27,29 @@ function PastEvent({ event }) {
       if (rsvpContract) {
         console.log("Event Id", event.id);
         console.log("Attendee", attendee);
-        const txn = await rsvpContract.confirmAttendee(
-          "0x8696ce756f7fa8e5104e65fe9c09321b259bf1986a105c06ff0b03ebc40c6cba",
-          attendee,
-          { gasLimit: 900000 }
-        );
+        const txn = await rsvpContract.confirmAttendee(event.id, attendee);
         setLoading(true);
-        console.log("Minting.....", txn.hash);
+        console.log("Minting...", txn.hash);
         console.log("TRANSACTION", txn);
         await txn.wait();
         console.log("Minted -- ", txn.hash);
         setSuccess(true);
         setLoading(false);
-        setMessage("Attendance has been confirmed...");
+        setMessage("Attendance has been confirmed..");
       } else {
         console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
       setSuccess(false);
-      setMessage(
-        `Error: ${process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL}tx/${txn.hash}`
-      );
+      // setMessage(
+      //   `Error: ${process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL}tx/${txn.hash}`
+      // );
       setMessage("Error!");
       setLoading(false);
       console.log(error);
     }
   };
-  confirmAttendee("0xd3bae574fb68f217dc42c51f0e98a568bfb67c31");
+
   const confirmAllAttendees = async () => {
     console.log("confirmAllAttendees");
     try {
