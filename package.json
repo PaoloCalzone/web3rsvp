@@ -1,12 +1,21 @@
 {
   "name": "web3rsvp",
+  "keywords": [
+    "web3",
+    "30daysofweb3",
+    "dapp"
+  ],
+  "author": "Paolo Calzone",
+  "license": "MIT",
   "version": "1.0.0",
-  "description": "",
+  "description": "A dApp built on Polygon, TheGraph and NextJs based on the 30 days of web3 curriculum.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+    "contracts:prettier": "pnpm --filter contracts run prettier",
+    "contracts:test": "pnpm --filter contracts run test",
+    "contracts:deploy": "pnpm --filter contracts run compile && pnpm --filter contracts run deploy",
+    "dapp:dev": "pnpm --filter frontend run dev",
+    "dapp:prettier": "pnpm --filter frontend run prettier"
+  }
+  
 }
