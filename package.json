@@ -17,5 +17,4 @@
     "dapp:dev": "pnpm --filter frontend run dev",
     "dapp:prettier": "pnpm --filter frontend run prettier"
   }
-  
 }
