@@ -1,4 +1,4 @@
-# WEB3RSVP 
+# WEB3RSVP dApp
 
 ## Description
 
