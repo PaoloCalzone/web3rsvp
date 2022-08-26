@@ -7,12 +7,14 @@ import { useAccount } from "wagmi";
 import Head from "next/head";
 import Link from "next/link";
 import Alert from "../components/Alert";
+import Spinner from "../components/Spinner";
 
 export default function CreateEvent() {
   const { data: account } = useAccount();
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(null);
+  const [submitting, setSubmitting] = useState(null);
   const [eventID, setEventID] = useState(null);
   const [eventName, setEventName] = useState("");
   const [eventDate, setEventDate] = useState("");
@@ -24,7 +26,7 @@ export default function CreateEvent() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    setSubmitting(true);
     const body = {
       name: eventName,
       description: eventDescription,
@@ -76,6 +78,7 @@ export default function CreateEvent() {
         setSuccess(true);
         setEventID(wait.events[0].args[0]);
         setMessage("Your event has been created successfully.");
+        setSubmitting(false);
       } else {
         console.log("Error getting contract.");
       }
@@ -83,10 +86,11 @@ export default function CreateEvent() {
       setSuccess(false);
       setMessage(`There was an error creating your event: ${err.message}`);
       setLoading(false);
+      setSubmitting(false);
       console.log(err);
     }
   }
-
+  console.log("Submitting", submitting);
   useEffect(() => {
     // disable scroll on <input> elements of type number
     document.addEventListener("wheel", (event) => {
@@ -300,11 +304,14 @@ export default function CreateEvent() {
                     Cancel
                   </a>
                 </Link>
+
                 <button
                   type="submit"
                   className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  disabled={submitting}
                 >
-                  Create
+                  {submitting && <Spinner />}
+                  {submitting ? "Loading" : "Create"}
                 </button>
               </div>
             </div>
