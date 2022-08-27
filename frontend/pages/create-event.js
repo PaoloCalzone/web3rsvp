@@ -302,17 +302,18 @@ export default function CreateEvent() {
             <div className="pt-5">
               <div className="flex justify-end">
                 <Link href="/">
-                  <a className="bg-white py-2 px-4 border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  <a className="bg-white w-40 py-2 px-4 text-center border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Cancel
                   </a>
                 </Link>
 
                 <button
                   type="submit"
-                  className="ml-3 w-[300px] py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="flex   ml-3 w-40 py-2 px-8  border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   disabled={submitting}
                 >
-                  {submitting ? <Spinner /> : "Create"}
+                  {submitting ? <Spinner /> : ""}
+                  <span className="flex-1">Create</span>
                 </button>
               </div>
             </div>
