@@ -7,3 +7,9 @@
 ## 7. Querying the Graph
 
 1. Where does the url data in the `[id]` page come from? (the context object)
+
+## Working with graphql queries
+
+1. loading
+2. error
+3. data
