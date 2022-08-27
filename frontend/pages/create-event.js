@@ -42,9 +42,11 @@ export default function CreateEvent() {
       });
       if (response.status !== 200) {
         alert("Ooops! Something went wrong. Please refresh and try again.");
+        setSubmitting(false);
       } else {
         console.log("Form successfully submitted!");
         let responseJSON = await response.json();
+        setSubmitting(false);
         await createEvent(responseJSON.cid);
       }
       // check response, if success is false, don't take the to success page
@@ -52,6 +54,7 @@ export default function CreateEvent() {
       alert(
         `Oops! Something went wrong. Please refresh and try agin. Error ${err}`
       );
+      setSubmitting(false);
     }
   }
   async function createEvent(cid) {
@@ -78,7 +81,6 @@ export default function CreateEvent() {
         setSuccess(true);
         setEventID(wait.events[0].args[0]);
         setMessage("Your event has been created successfully.");
-        setSubmitting(false);
       } else {
         console.log("Error getting contract.");
       }
@@ -307,11 +309,10 @@ export default function CreateEvent() {
 
                 <button
                   type="submit"
-                  className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="ml-3 w-[300px] py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   disabled={submitting}
                 >
-                  {submitting && <Spinner />}
-                  {submitting ? "Loading" : "Create"}
+                  {submitting ? <Spinner /> : "Create"}
                 </button>
               </div>
             </div>
