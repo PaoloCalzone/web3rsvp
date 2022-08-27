@@ -4,6 +4,7 @@ let nextImages = [
   "/rainbow.png",
   "/santorini.png",
   "/summer.png",
+  "/limon.png",
 ];
 
 function getRandomImage() {
