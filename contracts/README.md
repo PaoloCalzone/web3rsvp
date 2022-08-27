@@ -1,13 +1,20 @@
-# Sample Hardhat Project
+# WEB3RSVP contract
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This package contain the smart contract. 
 
-Try running some of the following tasks:
+Fork and clone the repo from Github to work with it locally
 
-```shell
-npx hardhat help
-npx hardhat test
-GAS_REPORT=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+    Click the "Fork" button
+
+    In your account's forked github repo, click the "Code" button and copy the repo link.
+
+    Open your terminal.
+
+    CD into the repo
+
+    Install dependencies npm i
+    
+    Test the smart contract:
+    
+    `npx hardhat run scripts/run.js # will test `contracts/Web3RSVP.sol` functions`
+
