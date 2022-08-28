@@ -92,7 +92,7 @@ export default function CreateEvent() {
       console.log(err);
     }
   }
-  console.log("Submitting", submitting);
+
   useEffect(() => {
     // disable scroll on <input> elements of type number
     document.addEventListener("wheel", (event) => {
